@@ -6,3 +6,8 @@
 ![1](https://i.imgur.com/YMxacdm.png)
 ![2](https://i.imgur.com/edK8qjF.png)
 ![3](https://i.imgur.com/jZO0w7L.png)
+
+
+<img src="https://i.imgur.com/YMxacdm.png" width="200" />
+<img src="https://i.imgur.com/edK8qjF.png" width="200" />
+<img src="https://i.imgur.com/jZO0w7L.png" width="200" />
