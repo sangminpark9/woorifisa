@@ -4,7 +4,7 @@
 2. Problem
    - 숨바꼭질 문제를 푸는데, 다양한 테스트케이스에서 틀리고 있음. 어떻게 해결해야할까…
 3. Try
-   - 파이팅
+   - 결국 교육이 끝나는 시간 15분 전에 문제를 풀긴했다.
 
 ---
 
@@ -174,3 +174,62 @@ for ele in output:
 ```
 > N값이 n+1, n-1, n*2, 3개의 값으로 증가하여 m값이 되는 최소값을 구하는 코드에서 지나온 N값을 노드로 연결하여 구현하였다.
 > 숨바꼭질1~3까지는 next N값을 if문으로 받았지만, 같은 코드를 계속 쓰는 것 같아서 for 반복문으로 변경을 해주었고 node의 next를 추가해주었다. 마지막은 노드의 순서는 반대로 돼 있어, 리스트에 data값만 추가하여 [::-1]로 정순서로 바꿔줌
+
+# 백준 17071 숨바꼭질5
+[숨바꼭질5](https://www.acmicpc.net/problem/17071)
+```python
+from collections import deque
+
+n, m = map(int, input().rstrip().split())
+
+def bfs(n, m):
+    LIMIT = 500000
+    visited = [[-1, -1] for _ in range(LIMIT + 1)]  # 방문 시간 기록: [짝수 초, 홀수 초]
+    
+    q = deque()
+    q.append(n)
+    visited[n][0] = 0  # 시작 위치 방문 시간 기록 (짝수 초)
+
+    time = 0
+    
+    while q:
+        size = len(q)
+        
+        for _ in range(size):
+            N = q.popleft()
+            
+            # 동생의 현재 위치와 비교
+            if N == m:
+                return time
+
+            # 다음 이동 가능한 위치들
+            next_N_list = [N + 1, N - 1, N * 2]
+            
+            for next_N in next_N_list:
+                if 0 <= next_N <= LIMIT and visited[next_N][(time + 1) % 2] == -1:
+                    visited[next_N][(time + 1) % 2] = time + 1
+                    q.append(next_N)
+        
+        time += 1
+        m += time  # 동생의 위치 갱신
+        
+        if m > LIMIT:
+            return -1
+        
+        # 현재 시간에 동생의 위치에 수빈이가 도달한 적이 있는지 확인
+        if visited[m][time % 2] != -1:
+            return time
+
+    return -1
+
+print(bfs(n, m))
+```
+
+> 간단히 생각하자면 수빈이가 지나친 적이 있는 m값이 홀수 초에 도착했다면, 수빈이가 도착한 적이 있는 m값도 홀수 초에 도착해야 만날 수 있다는 소리다.
+> 만약 다르다면 못 만난다고 가정이 되는 것.
+```python
+if visited[m][time % 2] != -1:
+	return time
+```
+> 위 코드를 통해서 n값이 진행한 초를 홀수, 짝수로 판별해서 입력하고
+> time은 동생이 도착한 time의 홀짝
