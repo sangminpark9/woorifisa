@@ -42,13 +42,13 @@ from flask import Flask, render_template, request
 from flask_wtf import CSRFProtect
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = '안전한_비밀키'  # 실제 사용 시 안전한 비밀키로 변경
 csrf = CSRFProtect(app)
+
 @app.route('/submit', methods=['POST'])
-def submit(): # 처리 로직
+def submit():
 	return "Form submitted!"
-if __name__ == '__main__':
-	app.run(debug=True)
+
 ```
 
 2. 대규모 애플리케이션 개발 시 복잡성 증가
