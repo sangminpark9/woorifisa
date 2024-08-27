@@ -55,7 +55,7 @@ def submit():
 	return "Form submitted!"
 
 ```
-```python
+```html
 <form method="post">
     {{ form.csrf_token }}
     <!-- 폼 필드들 -->
