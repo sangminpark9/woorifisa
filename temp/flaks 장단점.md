@@ -11,6 +11,7 @@
    if __name__ == '__main__':
    	app.run(debug=True)
    ```
+   
 
    - 필요한 기능만 추가(효율성, 간결성)
    > 불필요한 기능이 없으므로, 코드가 간결하고 이해하기 쉬운 구조로 유지
@@ -53,6 +54,13 @@ csrf = CSRFProtect(app)
 def submit():
 	return "Form submitted!"
 
+```
+```python
+<form method="post">
+    {{ form.csrf_token }}
+    <!-- 폼 필드들 -->
+    <input type="submit" value="제출">
+</form>
 ```
 
 2. 대규모 애플리케이션 개발 시 복잡성 증가
