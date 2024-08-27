@@ -84,15 +84,16 @@ my_flask_app/
 GitHub 통계:
 * 장고는 플라스크보다 더 많은 스타와 포크 수
 - Django가 더 많은 개발자들이 관심을 가지고 있음
-![](image.png)
+<img width="1012" alt="image" src="https://github.com/user-attachments/assets/9791b316-42e0-44fa-9d8b-5a1f32e15d11">
+
 [django/django: The Web framework for perfectionists with deadlines.](https://github.com/django/django)
-![](image%202.png)
+<img width="1023" alt="image 2" src="https://github.com/user-attachments/assets/bb3b02c3-633c-47b4-bf91-192aab4acd39">
 [pallets/flask: The Python micro framework for building web applications.](https://github.com/pallets/flask)
 
 ⠀Stack Overflow 활동:
 * 장고 관련 질문과 답변의 수가 플라스크보다 많음
  장고 : 312,783 questions, 플라스크 : 55,761 questions
-![](image%203.png)
+<img width="764" alt="image 3" src="https://github.com/user-attachments/assets/8a850862-6cea-4162-a93a-8f63bb0e9ce2">
 [Newest 'django' Questions](https://stackoverflow.com/questions/tagged/django)
-![](image%204.png)
+<img width="764" alt="image 4" src="https://github.com/user-attachments/assets/bc0d2f1a-a5c6-489f-8744-addc4419a811">
 [Newest 'flask' Questions](https://stackoverflow.com/questions/tagged/flask)
