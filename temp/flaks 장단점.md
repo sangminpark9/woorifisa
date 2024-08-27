@@ -63,6 +63,19 @@ def submit():
 </form>
 ```
 
+```python
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route('/hello', methods=['GET'])
+def hello():
+    return jsonify(message="Hello, World!")
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
 2. 대규모 애플리케이션 개발 시 복잡성 증가
 > 파일 구조와 설정을 체계적으로 관리해야하는 점.
 ```
