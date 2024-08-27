@@ -43,7 +43,7 @@ from flask_wtf import CSRFProtect
 
 app = Flask(__name__)
 
-# CSRF 생성에 사용할 키
+# CSRF 토큰 생성에 사용할 키
 app.config['SECRET_KEY'] = '비밀키'
 # CSRFProtect를 앱에 적용
 csrf = CSRFProtect(app)
