@@ -81,3 +81,18 @@ my_flask_app/
 ```
 
 3. Django에 비해 Flask는 상대적으로 작은 커뮤니티와 플러그인 생태계
+GitHub 통계:
+* 장고는 플라스크보다 더 많은 스타와 포크 수
+- Django가 더 많은 개발자들이 관심을 가지고 있음
+![](image.png)
+[django/django: The Web framework for perfectionists with deadlines.](https://github.com/django/django)
+![](image%202.png)
+[pallets/flask: The Python micro framework for building web applications.](https://github.com/pallets/flask)
+
+⠀Stack Overflow 활동:
+* 장고 관련 질문과 답변의 수가 플라스크보다 많음
+ 장고 : 312,783 questions, 플라스크 : 55,761 questions
+![](image%203.png)
+[Newest 'django' Questions](https://stackoverflow.com/questions/tagged/django)
+![](image%204.png)
+[Newest 'flask' Questions](https://stackoverflow.com/questions/tagged/flask)
