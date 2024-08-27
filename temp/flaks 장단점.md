@@ -42,9 +42,13 @@ from flask import Flask, render_template, request
 from flask_wtf import CSRFProtect
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '안전한_비밀키'  # 실제 사용 시 안전한 비밀키로 변경
+
+# CSRF 생성에 사용할 키
+app.config['SECRET_KEY'] = '비밀키'
+# CSRFProtect를 앱에 적용
 csrf = CSRFProtect(app)
 
+# POST가 올바른 형식이라면 반환
 @app.route('/submit', methods=['POST'])
 def submit():
 	return "Form submitted!"
