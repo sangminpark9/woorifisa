@@ -1,0 +1,241 @@
+# 10주차
+
+# ML00
+
+## Box flot
+```python
+q1 = np.percentile(df.length, 25)
+q3 = np.percentile(df.length, 75)
+iqr = (q3 - q1)
+# 절사평균 : max, min을 구해보시고 현재 도미의 길이 데이터에는 outlier(이상치)가 있는지 직접 확인해보세요
+min_ = q1 - 1.5*iqr
+max_ = q3 + 1.5*iqr
+print(min_, max_)
+filtered_df = df[(min_ < df['length']) & (df['length'] < max_)]
+```
+
+
+## 복원추출 / 비복원추출
+
+```python
+# '사건' : 특정한 일이 발생하게 만드는 행위
+# 복원추출 - 독립사건
+a = np.random.choice(df.length, size=20)   # 한 번 물고기를 꺼내고 다시 돌려놓고 다음 물고기를 뽑는 경우
+```
+
+```python
+df.length[:20]
+```
+
+```python
+# 종속사건 : 먼저 일어난 일이 다음에 일어난 일에 영향을 미치는 사건
+# 비복원추출
+b = np.random.choice(df.length, size=20, replace=False)   # 한 번 물고기를 꺼내고 그 물고기는 제외하고 다음 물고기를 뽑는 경우
+```
+
+
+# 이항분포(binom distribution)
+* 베르누이 시행을 여러번 했을 경우의 분포
+* 주사위를 10번 던졌을 때 1이 나오는 경우를 성공이라고 가정
+
+```python
+x = [0, 1] # 실패, 성공
+# 1과 1이 아닐 확률 성공, 실패
+rv = binom(10, 1/6)  # 확률이 1/6인 사건을 10번 시행했을 때 실패 / 성공 확률
+rv.pmf(x)
+```
+
+
+# ML01
+
+1. 머신러닝의 구분
+![image](https://github.com/user-attachments/assets/70f9a951-bfaf-437b-a155-93c073dbae70)
+
+~https://github.com/trekhleb/homemade-machine-learning~
+
+
+2. teachable machine
+
+<img width="765" alt="image" src="https://github.com/user-attachments/assets/31fad07e-6ae5-44b3-b77b-6ac596647289">
+
+Teachable Machine에서 사용되는 에포크, 배치 크기, 학습률은 머신러닝 모델을 훈련할 때 중요한 하이퍼파라미터입니다.
+| **하이퍼파라미터** | **정의** | **특징** | **예시** |
+|:-:|:-:|:-:|:-:|
+| 에포크(Epoch) | 전체 데이터셋을 한 번 완전히 통과하는 학습 주기 | - 많을수록 더 많이 학습<br>- 과적합 위험 있음 | 100개 이미지, 10 에포크 = 모든 이미지 10번 반복 학습 |
+| 배치 크기(Batch Size) | 한 번에 처리되는 데이터 샘플의 수 | - 큰 배치: 빠른 학습, 많은 메모리 사용<br>- 작은 배치: 느린 학습, 적은 메모리 사용 | 배치 크기 32 = 32개 이미지 동시 처리 |
+| 학습률(Learning Rate) | 각 학습 단계에서 가중치 조정 정도 | - 큰 학습률: 빠른 학습, 최적점 놓칠 수 있음<br>- 작은 학습률: 안정적 학습, 시간 오래 걸림 | (수치적 예시 없음) |
+
+```python
+import os
+import shutil
+import re
+
+TARGET_DIR = "/Users/sangmin/Desktop/09_ML/test"
+
+def organize_files():
+    pattern = re.compile(r'(\d[LR])\.png$')
+    
+    # 모든 가능한 디렉토리 이름 리스트
+    directories = ['5L', '4L', '3L', '2L', '1L', '0L', '5R', '4R', '3R', '2R', '1R', '0R']
+    
+    # 디렉토리가 없으면 생성
+    for dir_name in directories:
+        dir_path = os.path.join(TARGET_DIR, dir_name)
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+            print(f"Created directory: {dir_path}")
+
+    # TARGET_DIR의 모든 파일을 검사
+    for filename in os.listdir(TARGET_DIR):
+        if filename.endswith('.png'):
+            match = pattern.search(filename)
+            if match:
+                dir_name = match.group(1)
+                if dir_name in directories:
+                    source_path = os.path.join(TARGET_DIR, filename)
+                    target_dir = os.path.join(TARGET_DIR, dir_name)
+                    target_path = os.path.join(target_dir, filename)
+                    
+                    # 파일 이동
+                    shutil.move(source_path, target_path)
+                    print(f"Moved {filename} to {target_dir}/")
+                else:
+                    print(f"Skipped {filename}: No matching directory")
+            else:
+                print(f"Skipped {filename}: Doesn't match the pattern")
+
+if __name__ == "__main__":
+    organize_files()
+    print("File organization complete.")
+```
+
+> test set 분류 코드
+
+# streamlit code
+```python
+import streamlit as st
+import numpy as np
+from PIL import Image, ImageOps
+import tensorflow as tf
+import os
+
+# 페이지 설정
+st.set_page_config(page_title="손꾸락 판별기", page_icon="👋", layout="wide")
+
+# CSS를 사용한 스타일링
+st.markdown("""
+<style>
+.big-font {
+    font-size:30px !important;
+    font-weight: bold;
+    color: #1E88E5;
+}
+.result-font {
+    font-size:24px !important;
+    font-weight: bold;
+    color: #4CAF50;
+}
+.stProgress > div > div > div > div {
+    background-color: #1E88E5;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# 현재 스크립트의 디렉토리 경로
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Disable scientific notation for clarity
+np.set_printoptions(suppress=True)
+
+# 사용자 정의 객체 정의
+class CustomDepthwiseConv2D(tf.keras.layers.DepthwiseConv2D):
+    def __init__(self, *args, **kwargs):
+        if 'groups' in kwargs:
+            del kwargs['groups']
+        super().__init__(*args, **kwargs)
+
+# 사용자 정의 객체를 사용하여 모델 로드
+@st.cache_resource
+def load_model_with_custom_objects(model_path):
+    return tf.keras.models.load_model(model_path, custom_objects={'DepthwiseConv2D': CustomDepthwiseConv2D}, compile=False)
+
+# Load the model
+model_path = os.path.join(current_dir, "keras_Model.h5")
+if not os.path.exists(model_path):
+    st.error(f"모델 파일을 찾을 수 없습니다: {model_path}")
+    st.stop()
+
+try:
+    model = load_model_with_custom_objects(model_path)
+except Exception as e:
+    st.error(f"모델 로딩 중 오류 발생: {str(e)}")
+    st.stop()
+
+# Load the labels
+labels_path = os.path.join(current_dir, "labels.txt")
+if not os.path.exists(labels_path):
+    st.error(f"레이블 파일을 찾을 수 없습니다: {labels_path}")
+    st.stop()
+
+class_names = open(labels_path, "r").readlines()
+
+# 이미지 전처리
+def preprocess_image(image):
+    size = (224, 224)
+    image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
+    image_array = np.asarray(image)
+    normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
+    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+    data[0] = normalized_image_array
+    return data
+
+# 예측
+def predict(img):
+    preprocessed_img = preprocess_image(img)
+    prediction = model.predict(preprocessed_img)
+    index = np.argmax(prediction)
+    class_name = class_names[index]
+    confidence_score = prediction[0][index]
+    return class_name[2:].strip(), confidence_score
+
+# Streamlit 앱
+def main():
+    st.markdown('<p class="big-font">👋 손꾸락 판별기</p>', unsafe_allow_html=True)
+    st.write("AI가 당신의 손 제스처를 인식합니다. 이미지를 업로드해보세요!")
+
+    uploaded_file = st.file_uploader("이미지를 선택하세요", type=["jpg", "jpeg", "png"])
+
+    if uploaded_file is not None:
+        with st.spinner('이미지 처리 중...'):
+            image = Image.open(uploaded_file).convert('RGB')
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                st.image(image, caption='업로드된 이미지', use_column_width=True)
+            
+            with col2:
+                # 예측
+                result, confidence = predict(image)
+                st.markdown(f'<p class="result-font">인식된 손가락 숫자: {result}</p>', unsafe_allow_html=True)
+                st.write(f"신뢰도: {confidence:.2f}")
+                
+                # 프로그레스 바로 신뢰도 표시
+                st.progress(float(confidence))
+                
+                # 결과에 따른 이모지 표시
+                if confidence > 0.8:
+                    st.success("높은 신뢰도로 인식되었습니다! 👍")
+                elif confidence > 0.5:
+                    st.warning("중간 정도의 신뢰도입니다. 다시 시도해보세요. 🤔")
+                else:
+                    st.error("낮은 신뢰도입니다. 다른 이미지로 시도해보세요. 😕")
+
+    st.markdown("---")
+    st.write("© 2024 손꾸락 판별기 | 제작: 지상하")
+
+if __name__ == "__main__":
+    main()
+
+```
+
+<img width="1327" alt="image" src="https://github.com/user-attachments/assets/4d3e2873-45f8-4f43-adc2-66552548e9fe">
